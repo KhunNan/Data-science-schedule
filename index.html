@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Science Bootcamp 13 | Learning Tracker</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --card-dark: #161617;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-blue: #0071e3;
+            --accent-green: #34c759;
+            --accent-purple: #af52de;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+            --transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.47;
+            padding-bottom: 80px;
+        }
+
+        /* Apple Glass Navigation Header */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.015em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px;
+            border-radius: 30px;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: #ffffff;
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* Layout & Container */
+        .container {
+            max-width: 1120px;
+            margin: 32px auto 0;
+            padding: 0 24px;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Progress Bar Widget */
+        .progress-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .progress-bar-bg {
+            flex-grow: 1;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .progress-text {
+            font-size: 15px;
+            font-weight: 600;
+            min-width: 120px;
+            text-align: right;
+        }
+
+        /* Grid Setup */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+        }
+
+        .card-dark {
+            background: var(--card-dark);
+            color: #ffffff;
+        }
+
+        /* Typography */
+        .eyebrow {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .headline {
+            font-size: 36px;
+            line-height: 1.1;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .subheadline {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Checkable Checklist Styling */
+        .checklist {
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .check-item:last-child {
+            border-bottom: none;
+        }
+
+        .check-item input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d1d6;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            margin-top: 2px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .check-item input[type="checkbox"]:checked {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .check-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .check-item.completed label {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .check-label {
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .badge-live { background: #e0f2fe; color: #0369a1; }
+        .badge-ondemand { background: #f3e8ff; color: #6b21a8; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <div class="nav-title">Data Science Bootcamp 13</div>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('page1', this)">Course Overview</button>
+            <button class="tab-btn" onclick="switchTab('page2', this)">Schedule & Checklist</button>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- Progress Tracker Bar -->
+        <div class="progress-card">
+            <div style="font-size: 14px; font-weight: 600; min-width: 140px;">Course Progress</div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 / 0 (0%)</div>
+        </div>
+
+        <!-- PAGE 1: COURSE OVERVIEW & MOTIVATION -->
+        <section id="page1" class="page active">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <p class="eyebrow">DataRockie 2026 Batch</p>
+                <h1 class="headline">Become a Data Analyst Jedi</h1>
+                <p class="subheadline">4-Month Intensive Program | Sep 1, 2026 – Feb 28, 2027</p>
+            </div>
+
+            <div class="grid-2">
+                <!-- Motivation Card -->
+                <div class="card card-dark">
+                    <p class="eyebrow" style="color: var(--accent-purple);">Inspiration & Motivation</p>
+                    <h2 style="font-size: 26px; font-weight:600; margin-bottom:12px;">Transform Skill into Impact.</h2>
+                    <p style="font-size: 15px; line-height: 1.6; color: #a1a1a6; margin-bottom: 20px;">
+                        Build real-world projects, master foundational AI, and establish core capabilities from data querying to predictive modeling.
+                    </p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px; color: #e5e5e5; font-size: 14px;">✦ Complete 10+ hands-on projects</li>
+                        <li style="margin-bottom: 10px; color: #e5e5e5; font-size: 14px;">✦ Master modern tools: SQL, R, Python & Gemini AI</li>
+                        <li style="margin-bottom: 10px; color: #e5e5e5; font-size: 14px;">✦ Graduate with an industry-ready portfolio</li>
+                    </ul>
+                </div>
+
+                <!-- Key Takeaways -->
+                <div class="card">
+                    <p class="eyebrow">Key Takeaways</p>
+                    <h2 style="font-size: 26px; font-weight:600; margin-bottom:12px;">Core Capabilities</h2>
+                    <ul style="list-style: none; padding: 0; font-size: 15px; line-height: 1.8;">
+                        <li>🤖 <strong>AI Foundation:</strong> Google Gemini & Notion for workflow automation.</li>
+                        <li>📊 <strong>Data Analysis:</strong> Advanced Google Sheets formulas, QUERY & Pivot Tables.</li>
+                        <li>🗄️ <strong>Databases:</strong> SQLite relational query design, JOINS & Subqueries.</li>
+                        <li>📈 <strong>Business Intelligence:</strong> Google Looker Studio dashboard design.</li>
+                        <li>💻 <strong>Programming & ML:</strong> R, Python, and Predictive Machine Learning.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: DAILY SCHEDULE & CHECKLIST -->
+        <section id="page2" class="page">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <p class="eyebrow">Interactive Schedule</p>
+                <h1 class="headline">Follow Up Checklist</h1>
+                <p class="subheadline">Check off classes as you complete them to automatically track your progress.</p>
+            </div>
+
+            <div class="grid-2">
+                <!-- Live Class Schedule -->
+                <div class="card">
+                    <span class="badge badge-live">Live Classes (Saturdays 09:00 - 12:00)</span>
+                    <h2 style="font-size: 22px; font-weight: 600; margin-bottom: 16px;">Live Core Curriculum</h2>
+                    
+                    <ul class="checklist" id="liveChecklist">
+                        <li class="check-item"><input type="checkbox" id="live1" onchange="updateProgress()"><label for="live1" class="check-label">Live 01: Intro to Data Science & Learning Systems</label></li>
+                        <li class="check-item"><input type="checkbox" id="live2" onchange="updateProgress()"><label for="live2" class="check-label">Live 02: AI Foundation ft. Google Gemini</label></li>
+                        <li class="check-item"><input type="checkbox" id="live3" onchange="updateProgress()"><label for="live3" class="check-label">Live 03: Building A Second Brain with Notion</label></li>
+                        <li class="check-item"><input type="checkbox" id="live4" onchange="updateProgress()"><label for="live4" class="check-label">Live 04: Google Sheets Sprint</label></li>
+                        <li class="check-item"><input type="checkbox" id="live5" onchange="updateProgress()"><label for="live5" class="check-label">Live 05: Relational Databases & SQL</label></li>
+                        <li class="check-item"><input type="checkbox" id="live6" onchange="updateProgress()"><label for="live6" class="check-label">Live 06: Dashboards with Google Looker Studio</label></li>
+                        <li class="check-item"><input type="checkbox" id="live7" onchange="updateProgress()"><label for="live7" class="check-label">Live 07: R Programming Fundamentals</label></li>
+                        <li class="check-item"><input type="checkbox" id="live8" onchange="updateProgress()"><label for="live8" class="check-label">Live 08: Data Transformation with Tidyverse</label></li>
+                        <li class="check-item"><input type="checkbox" id="live9" onchange="updateProgress()"><label for="live9" class="check-label">Live 09: Data Visualization Principles</label></li>
+                        <li class="check-item"><input type="checkbox" id="live10" onchange="updateProgress()"><label for="live10" class="check-label">Live 10: Building Traffic, Portfolio & Web SEO</label></li>
+                        <li class="check-item"><input type="checkbox" id="live11" onchange="updateProgress()"><label for="live11" class="check-label">Live 11: Essential Business Statistics</label></li>
+                        <li class="check-item"><input type="checkbox" id="live12" onchange="updateProgress()"><label for="live12" class="check-label">Live 12: Work Automation with AI</label></li>
+                        <li class="check-item"><input type="checkbox" id="live13" onchange="updateProgress()"><label for="live13" class="check-label">Live 13: Machine Learning Essentials</label></li>
+                        <li class="check-item"><input type="checkbox" id="live14" onchange="updateProgress()"><label for="live14" class="check-label">Live 14: Python Programming Essentials</label></li>
+                    </ul>
+                </div>
+
+                <!-- On-Demand Sprint Checklist -->
+                <div class="card">
+                    <span class="badge badge-ondemand">On-Demand Modules</span>
+                    <h2 style="font-size: 22px; font-weight: 600; margin-bottom: 16px;">Self-Paced Sprints</h2>
+                    
+                    <ul class="checklist" id="ondemandChecklist">
+                        <li class="check-item"><input type="checkbox" id="od1" onchange="updateProgress()"><label for="od1" class="check-label">Sprint 01: Notion Setup & Second Brain System</label></li>
+                        <li class="check-item"><input type="checkbox" id="od2" onchange="updateProgress()"><label for="od2" class="check-label">Sprint 02: Google Sheets 101 & Logic Functions</label></li>
+                        <li class="check-item"><input type="checkbox" id="od3" onchange="updateProgress()"><label for="od3" class="check-label">Sprint 03: Google Sheets 102 & Lookup Functions</label></li>
+                        <li class="check-item"><input type="checkbox" id="od4" onchange="updateProgress()"><label for="od4" class="check-label">Sprint 04: Advanced QUERY & Pivot Tables</label></li>
+                        <li class="check-item"><input type="checkbox" id="od5" onchange="updateProgress()"><label for="od5" class="check-label">Sprint 05: SQL Basics & SQLite Online Editor</label></li>
+                        <li class="check-item"><input type="checkbox" id="od6" onchange="updateProgress()"><label for="od6" class="check-label">Sprint 06: Advanced SQL Joins & Subqueries</label></li>
+                        <li class="check-item"><input type="checkbox" id="od7" onchange="updateProgress()"><label for="od7" class="check-label">Sprint 07: R Programming Structures & Loops</label></li>
+                        <li class="check-item"><input type="checkbox" id="od8" onchange="updateProgress()"><label for="od8" class="check-label">Sprint 08: Data Wrangling with dplyr</label></li>
+                        <li class="check-item"><input type="checkbox" id="od9" onchange="updateProgress()"><label for="od9" class="check-label">Sprint 09: A/B Testing & Linear/Logistic Regression</label></li>
+                        <li class="check-item"><input type="checkbox" id="od10" onchange="updateProgress()"><label for="od10" class="check-label">Sprint 10: Web Scraping Basics with Gazpacho</label></li>
+                        <li class="check-item"><input type="checkbox" id="od11" onchange="updateProgress()"><label for="od11" class="check-label">Final Project & Exam Submission</label></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script for Tab Switcher and Progress Storage -->
+    <script>
+        function switchTab(pageId, element) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const total = checkboxes.length;
+            let checkedCount = 0;
+
+            checkboxes.forEach(box => {
+                const parent = box.closest('.check-item');
+                if (box.checked) {
+                    checkedCount++;
+                    parent.classList.add('completed');
+                } else {
+                    parent.classList.remove('completed');
+                }
+                // Save state to LocalStorage
+                localStorage.setItem(box.id, box.checked);
+            });
+
+            const percent = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').innerText = `${checkedCount} / ${total} (${percent}%)`;
+        }
+
+        // Restore saved checklist states on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(box => {
+                const savedState = localStorage.getItem(box.id);
+                if (savedState === 'true') {
+                    box.checked = true;
+                }
+            });
+            updateProgress();
+        });
+    </script>
+</body>
+</html>

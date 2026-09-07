@@ -40,7 +40,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
@@ -84,7 +84,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        /* Container & Pages */
         .container {
             max-width: 1200px;
             margin: 32px auto 0;
@@ -102,7 +101,7 @@
             opacity: 1;
         }
 
-        /* Progress Tracker Bar */
+        /* Progress Card */
         .progress-card {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -139,17 +138,23 @@
             text-align: right;
         }
 
-        /* Apple Grid / Cards */
+        /* Layout & Typography */
         .grid-2 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
         }
 
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
         .card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 32px;
+            padding: 28px;
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
             transition: var(--transition);
@@ -183,32 +188,56 @@
             margin-bottom: 24px;
         }
 
-        /* Monthly Calendar Grid */
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .legend {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 500;
+        /* Quote Box */
+        .quote-box {
+            border-left: 3px solid var(--accent-purple);
+            padding-left: 16px;
+            margin: 16px 0;
+            font-style: italic;
             color: var(--text-secondary);
         }
 
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .card-dark .quote-box {
+            color: #a1a1a6;
+            border-left-color: var(--accent-blue);
+        }
+
+        .book-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            background: #e5e5ea;
+        }
+
+        /* Monthly Calendar Controls */
+        .month-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .month-btn {
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .month-btn.active {
+            background: var(--accent-blue);
+            color: #ffffff;
+            border-color: var(--accent-blue);
+        }
 
         .calendar-grid {
             display: grid;
@@ -249,17 +278,8 @@
             margin-bottom: 8px;
         }
 
-        .day-number {
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .badge {
-            font-size: 10px;
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 6px;
-        }
+        .day-number { font-size: 14px; font-weight: 700; }
+        .badge { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; }
 
         .type-live { background: #ffe5e5; color: var(--accent-red); }
         .type-ondemand { background: #e0f2fe; color: var(--accent-blue); }
@@ -308,9 +328,23 @@
         }
 
         .check-label { font-size: 11px; color: var(--text-secondary); }
-
         .day-card.completed { background: #f9f9fb; opacity: 0.7; }
         .day-card.completed .task-title { text-decoration: line-through; }
+
+        .btn-link {
+            display: inline-block;
+            background: var(--accent-blue);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 16px;
+            transition: var(--transition);
+        }
+
+        .btn-link:hover { opacity: 0.9; }
 
         @media (max-width: 900px) { .calendar-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 500px) { .calendar-grid { grid-template-columns: 1fr; } }
@@ -318,79 +352,111 @@
 </head>
 <body>
 
-    <!-- Header Navigation with 3 Tabs -->
     <nav>
         <div class="nav-title">Data Science Bootcamp 13</div>
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('page1', this)">1. Course Overview</button>
+            <button class="tab-btn active" onclick="switchTab('page1', this)">1. Course Overview & Books</button>
             <button class="tab-btn" onclick="switchTab('page2', this)">2. Daily Rhythm</button>
-            <button class="tab-btn" onclick="switchTab('page3', this)">3. Monthly Grid Calendar</button>
+            <button class="tab-btn" onclick="switchTab('page3', this)">3. 4-Month Grid Calendar</button>
         </div>
     </nav>
 
     <div class="container">
 
-        <!-- Progress Tracker Bar (Shared) -->
+        <!-- Shared Progress Tracker -->
         <div class="progress-card">
-            <div style="font-size: 14px; font-weight: 600;">Overall Progress</div>
+            <div style="font-size: 14px; font-weight: 600;">Bootcamp Progress</div>
             <div class="progress-bar-bg">
                 <div class="progress-bar-fill" id="progressBar"></div>
             </div>
             <div class="progress-text" id="progressText">0 / 0 (0%)</div>
         </div>
 
-        <!-- PAGE 1: COURSE OVERVIEW & MOTIVATION -->
+        <!-- PAGE 1: COURSE OVERVIEW, MOTIVATION & BOOKS -->
         <section id="page1" class="page active">
             <div style="text-align: center; margin-bottom: 40px;">
                 <p class="eyebrow">DataRockie 2026 Batch</p>
                 <h1 class="headline">Become a Data Analyst Jedi</h1>
-                <p class="subheadline">4-Month Intensive Program | Sep 1, 2026 – Feb 28, 2027</p>
+                <p class="subheadline">"สโลแกนโรงเรียน: นอนน้อยแต่นอนนะ = ยิ๊ววว" ⚡️</p>
+                <a href="https://bootcamp.datarockie.com/courses/enrolled/2974428" target="_blank" class="btn-link">🔗 เปิดเข้าสู่ระบบคอร์สเรียน DataRockie</a>
             </div>
 
-            <div class="grid-2">
-                <!-- Motivation Card -->
+            <!-- Stoic Motivation Card -->
+            <div class="grid-2" style="margin-bottom: 32px;">
                 <div class="card card-dark">
-                    <p class="eyebrow" style="color: var(--accent-purple);">Inspiration & Motivation</p>
-                    <h2 style="font-size: 26px; font-weight:600; margin-bottom:12px;">Transform Skill into Impact.</h2>
-                    <p style="font-size: 15px; line-height: 1.6; color: #a1a1a6; margin-bottom: 20px;">
-                        Build real-world projects, master foundational AI, and establish core capabilities from data querying to predictive modeling.
+                    <p class="eyebrow" style="color: var(--accent-purple);">Stoic Mindset</p>
+                    <h2 style="font-size: 24px; font-weight:600; margin-bottom:10px;">Rule Over Yourself</h2>
+                    <div class="quote-box">
+                        "Would you have a great empire? Rule over yourself." <br>— Epictetus
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.6; color: #a1a1a6;">
+                        ชัยชนะที่ยิ่งใหญ่ที่สุดเริ่มต้นที่การควบคุมตัวเอง ทนต่อสิ่งเร้าและปัจจัยภายนอก การเลือกอ่านหนังสือ เรียนรู้ และพัฒนาตัวเองทุกวัน คือโชคชะตาที่คุณเลือกเองได้ (Discipline is Destiny).
                     </p>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 10px; color: #e5e5e5; font-size: 14px;">✦ Complete hands-on real-world projects</li>
-                        <li style="margin-bottom: 10px; color: #e5e5e5; font-size: 14px;">✦ Master modern tools: SQL, R, Python & Gemini AI</li>
-                        <li style="margin-bottom: 10px; color: #e5e5e5; font-size: 14px;">✦ Graduate with an industry-ready portfolio</li>
-                    </ul>
                 </div>
 
-                <!-- Key Takeaways -->
                 <div class="card">
-                    <p class="eyebrow">Key Takeaways</p>
-                    <h2 style="font-size: 26px; font-weight:600; margin-bottom:12px;">Core Capabilities</h2>
-                    <ul style="list-style: none; padding: 0; font-size: 15px; line-height: 1.8;">
-                        <li>🤖 <strong>AI Foundation:</strong> Google Gemini & Notion for workflow automation.</li>
-                        <li>📊 <strong>Data Analysis:</strong> Advanced Google Sheets formulas, QUERY & Pivot Tables.</li>
-                        <li>🗄️ <strong>Databases:</strong> SQLite relational query design, JOINS & Subqueries.</li>
-                        <li>📈 <strong>Business Intelligence:</strong> Google Looker Studio dashboard design.</li>
-                        <li>💻 <strong>Programming & ML:</strong> R, Python, and Predictive Machine Learning.</li>
-                    </ul>
+                    <p class="eyebrow" style="color: var(--accent-blue);">Generalist & Excellence</p>
+                    <h2 style="font-size: 24px; font-weight:600; margin-bottom:10px;">Journey is The Destination</h2>
+                    <div class="quote-box">
+                        "Eudaimonia คือเป้าหมายเดียวที่คู่ควรของชีวิต การได้เป็นตัวเองเวอร์ชันที่ดีที่สุด"
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.6; color: var(--text-secondary);">
+                        เราเปลี่ยนวิธีการคิดและพัฒนาทักษะได้ โฟกัสสิ่งที่คุณควบคุมได้ ตั้งใจทำวันนี้ให้ดีที่สุด แล้วคุณค่าจะวิ่งกลับมาหาคุณเอง!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Recommended Books Grid -->
+            <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 16px;">📚 Required Reading List (หนังสือแนะนำโดย DataRockie)</h2>
+            <div class="grid-4">
+                <div class="card" style="padding: 18px;">
+                    <img src="https://m.media-amazon.com/images/I/61H4qVdK3OL._SL1500_.jpg" alt="Discipline is Destiny" class="book-img">
+                    <div class="eyebrow">Self-Discipline</div>
+                    <div class="task-title" style="font-size: 14px;">Discipline is Destiny</div>
+                    <div class="task-desc">Ryan Holiday</div>
+                    <div class="quote-box" style="font-size: 11px; margin-top: 8px;">"ความมีวินัยคือโชคชะตาที่เราเลือกได้"</div>
+                </div>
+
+                <div class="card" style="padding: 18px;">
+                    <img src="https://m.media-amazon.com/images/I/71u9sAnW24L._SL1500_.jpg" alt="Building a Second Brain" class="book-img">
+                    <div class="eyebrow">Productivity</div>
+                    <div class="task-title" style="font-size: 14px;">Building a Second Brain</div>
+                    <div class="task-desc">Tiago Forte</div>
+                    <div class="quote-box" style="font-size: 11px; margin-top: 8px;">"จัดระเบียบความคิดสร้างสรรค์ด้วย Notion"</div>
+                </div>
+
+                <div class="card" style="padding: 18px;">
+                    <img src="https://m.media-amazon.com/images/I/71XmC6RkXAL._SL1500_.jpg" alt="Think Like a Freak" class="book-img">
+                    <div class="eyebrow">Critical Thinking</div>
+                    <div class="task-title" style="font-size: 14px;">Think Like A Freak</div>
+                    <div class="task-desc">Steven Levitt & Stephen Dubner</div>
+                    <div class="quote-box" style="font-size: 11px; margin-top: 8px;">"เริ่มต้นด้วยการตั้งคำถามที่ดี"</div>
+                </div>
+
+                <div class="card" style="padding: 18px;">
+                    <img src="https://m.media-amazon.com/images/I/81PjJ-z6YSL._SL1500_.jpg" alt="Business Made Simple" class="book-img">
+                    <div class="eyebrow">Business Mindset</div>
+                    <div class="task-title" style="font-size: 14px;">Business Made Simple</div>
+                    <div class="task-desc">Donald Miller</div>
+                    <div class="quote-box" style="font-size: 11px; margin-top: 8px;">"Value is what you create. Revenue is what you get."</div>
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 2: DAILY SCHEDULE RHYTHM -->
+        <!-- PAGE 2: DAILY RHYTHM -->
         <section id="page2" class="page">
             <div style="text-align: center; margin-bottom: 40px;">
                 <p class="eyebrow">Schedule & Rhythm</p>
                 <h1 class="headline">Weekly Learning Structure</h1>
-                <p class="subheadline">Balanced routine designed for consistent progress without burnout.</p>
+                <p class="subheadline">โครงสร้างการเรียนรู้ประจำสัปดาห์</p>
             </div>
 
             <div class="grid-2">
                 <div class="card">
-                    <p class="eyebrow" style="color: var(--accent-red);">Sat (09:00 - 12:00)</p>
-                    <h2 style="font-size: 22px; font-weight: 600; margin-bottom: 12px;">🔴 Live Core Curriculum</h2>
+                    <p class="eyebrow" style="color: var(--accent-red);">Saturday (09:00 - 12:00)</p>
+                    <h2 style="font-size: 22px; font-weight: 600; margin-bottom: 12px;">🔴 Main Live Curriculum</h2>
                     <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
-                        Interactive live coding, sprint projects, real-time Q&A, and direct feedback from instructors every Saturday morning.
+                        เรียนสดพร้อมกันทุกเช้าวันเสาร์ ถอดรหัสเนื้อหาหลัก ปฏิบัติจริง พร้อมถามตอบแบบสดๆ กับแอดทอย
                     </p>
                 </div>
 
@@ -398,7 +464,7 @@
                     <p class="eyebrow" style="color: var(--accent-blue);">Mon / Wed / Fri</p>
                     <h2 style="font-size: 22px; font-weight: 600; margin-bottom: 12px;">💻 On-Demand Sprints</h2>
                     <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
-                        Flexible bite-sized video lessons (5-15 mins), hands-on homework exercises, and code challenges at your own pace.
+                        เก็บเนื้อหาย่อย ย้อนหลัง และลงมือทำแบบฝึกหัดทบทวนความรู้ด้วยตัวเอง
                     </p>
                 </div>
 
@@ -406,7 +472,7 @@
                     <p class="eyebrow" style="color: var(--accent-purple);">Tue / Thu</p>
                     <h2 style="font-size: 22px; font-weight: 600; margin-bottom: 12px;">📚 Self-Development</h2>
                     <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
-                        30-45 minutes dedicated to reading self-improvement or technical books to expand your mindset and skills.
+                        อ่านหนังสือพัฒนาตัวเองที่ชอบ 30-45 นาที เพื่อเติมกรอบความคิดและไอเดียใหม่ๆ
                     </p>
                 </div>
 
@@ -414,244 +480,205 @@
                     <p class="eyebrow" style="color: var(--accent-green);">Sunday</p>
                     <h2 style="font-size: 22px; font-weight: 600; margin-bottom: 12px;">🌿 Rest & Housework</h2>
                     <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
-                        Full recovery day to recharge, manage personal housework, and prepare mentally for the upcoming week.
+                        วันพักผ่อน ทำงานบ้าน ชาร์จพลังชีวิตอย่างเต็มที่พร้อมรับสัปดาห์ถัดไป
                     </p>
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 3: MONTHLY GRID CALENDAR (Interactive) -->
+        <!-- PAGE 3: 4-MONTH GRID CALENDAR (Sep - Dec 2026) -->
         <section id="page3" class="page">
-            <div class="calendar-header">
-                <h1 style="font-size: 28px; font-weight: 700;">September 2026 Grid Calendar</h1>
-                <div class="legend">
-                    <div class="legend-item"><div class="dot" style="background: var(--accent-red);"></div> Live (Sat)</div>
-                    <div class="legend-item"><div class="dot" style="background: var(--accent-blue);"></div> On-Demand (Mon/Wed/Fri)</div>
-                    <div class="legend-item"><div class="dot" style="background: var(--accent-purple);"></div> Book (Tue/Thu)</div>
-                    <div class="legend-item"><div class="dot" style="background: var(--accent-green);"></div> Rest (Sun)</div>
+            <div style="margin-bottom: 20px;">
+                <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 12px;">Bootcamp 13 Live Calendar</h1>
+                <div class="month-selector">
+                    <button class="month-btn active" onclick="showMonth('sep', this)">September 2026</button>
+                    <button class="month-btn" onclick="showMonth('oct', this)">October 2026</button>
+                    <button class="month-btn" onclick="showMonth('nov', this)">November 2026</button>
+                    <button class="month-btn" onclick="showMonth('dec', this)">December 2026</button>
                 </div>
             </div>
 
-            <div class="calendar-grid">
-                <div class="day-name">Sun</div>
-                <div class="day-name">Mon</div>
-                <div class="day-name">Tue</div>
-                <div class="day-name">Wed</div>
-                <div class="day-name">Thu</div>
-                <div class="day-name">Fri</div>
-                <div class="day-name">Sat</div>
+            <!-- SEPTEMBER 2026 -->
+            <div id="m-sep" class="month-grid">
+                <div class="calendar-grid">
+                    <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
 
-                <!-- Sep 1 (Tue) -->
-                <div class="day-card" style="grid-column: 3;">
-                    <div>
-                        <div class="day-header"><span class="day-number">1 Sep</span><span class="badge type-reading">Book</span></div>
-                        <div class="task-title">Self-Development Book</div>
-                        <div class="task-desc">อ่านหนังสือพัฒนาตัวเอง 30 นาที</div>
+                    <!-- Sep 1-4 -->
+                    <div class="day-card" style="grid-column: 3;">
+                        <div><div class="day-header"><span class="day-number">1 Sep</span><span class="badge type-reading">Book</span></div><div class="task-title">Self-Development Book</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep1" onchange="updateProgress()"><span class="check-label">Done</span></label>
                     </div>
-                    <label class="check-container"><input type="checkbox" id="d1" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    <div class="day-card">
+                        <div><div class="day-header"><span class="day-number">2 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">Spreadsheets 101</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep2" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+                    <div class="day-card">
+                        <div><div class="day-header"><span class="day-number">3 Sep</span><span class="badge type-reading">Book</span></div><div class="task-title">Self-Development Book</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep3" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+                    <div class="day-card">
+                        <div><div class="day-header"><span class="day-number">4 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">Spreadsheets 102</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep4" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Sep 5 (Live 01) -->
+                    <div class="day-card">
+                        <div><div class="day-header"><span class="day-number">5 Sep</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">INTRO TO DATA SCIENCE</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep5" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Sep 6 (Live 02) -->
+                    <div class="day-card">
+                        <div><div class="day-header"><span class="day-number">6 Sep</span><span class="badge type-live">🔴 LIVE (NEW)</span></div><div class="task-title">AI FOUNDATION</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep6" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Sep 7-11 -->
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">7 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">AI & Prompting</div></div><label class="check-container"><input type="checkbox" id="sep7" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">8 Sep</span><span class="badge type-reading">Book</span></div><div class="task-title">Self-Development Book</div></div><label class="check-container"><input type="checkbox" id="sep8" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">9 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">Notion System</div></div><label class="check-container"><input type="checkbox" id="sep9" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">10 Sep</span><span class="badge type-reading">Book</span></div><div class="task-title">Self-Development Book</div></div><label class="check-container"><input type="checkbox" id="sep10" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">11 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">Review & Homework</div></div><label class="check-container"><input type="checkbox" id="sep11" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+
+                    <!-- Sep 12 (Live 03) -->
+                    <div class="day-card">
+                        <div><div class="day-header"><span class="day-number">12 Sep</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">BUILDING A SECOND BRAIN</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep12" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Sep 13-18 -->
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">13 Sep</span><span class="badge type-rest">Rest</span></div><div class="task-title">Rest & Housework</div></div><label class="check-container"><input type="checkbox" id="sep13" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">14 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">Spreadsheet Formulas</div></div><label class="check-container"><input type="checkbox" id="sep14" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">15 Sep</span><span class="badge type-reading">Book</span></div><div class="task-title">Self-Development Book</div></div><label class="check-container"><input type="checkbox" id="sep15" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">16 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">Pivot Tables & Query</div></div><label class="check-container"><input type="checkbox" id="sep16" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">17 Sep</span><span class="badge type-reading">Book</span></div><div class="task-title">Self-Development Book</div></div><label class="check-container"><input type="checkbox" id="sep17" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">18 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">Data Cleaning</div></div><label class="check-container"><input type="checkbox" id="sep18" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+
+                    <!-- Sep 19 (Live 04) -->
+                    <div class="day-card">
+                        <div><div class="day-header"><span class="day-number">19 Sep</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">SPREADSHEETS</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep19" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Sep 20-25 -->
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">20 Sep</span><span class="badge type-rest">Rest</span></div><div class="task-title">Rest & Housework</div></div><label class="check-container"><input type="checkbox" id="sep20" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">21 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">SQL SELECT & WHERE</div></div><label class="check-container"><input type="checkbox" id="sep21" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">22 Sep</span><span class="badge type-reading">Book</span></div><div class="task-title">Self-Development Book</div></div><label class="check-container"><input type="checkbox" id="sep22" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">23 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">SQL Joins & Group By</div></div><label class="check-container"><input type="checkbox" id="sep23" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">24 Sep</span><span class="badge type-reading">Book</span></div><div class="task-title">Self-Development Book</div></div><label class="check-container"><input type="checkbox" id="sep24" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+                    <div class="day-card"><div><div class="day-header"><span class="day-number">25 Sep</span><span class="badge type-ondemand">On-Demand</span></div><div class="task-title">Database Design</div></div><label class="check-container"><input type="checkbox" id="sep25" onchange="updateProgress()"><span class="check-label">Done</span></label></div>
+
+                    <!-- Sep 26 (Live 05) -->
+                    <div class="day-card">
+                        <div><div class="day-header"><span class="day-number">26 Sep</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">SQL DATABASE</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="sep26" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Sep 2 (Wed) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">2 Sep</span><span class="badge type-ondemand">On-Demand</span></div>
-                        <div class="task-title">Google Sheets 101</div>
-                        <div class="task-desc">Formulas, Functions & Logic</div>
+            <!-- OCTOBER 2026 -->
+            <div id="m-oct" class="month-grid" style="display:none;">
+                <div class="calendar-grid">
+                    <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
+
+                    <!-- Oct 3 (Live 06) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">3 Oct</span><span class="badge type-live">🔴 LIVE (NEW)</span></div><div class="task-title">GOOGLE LOOKER STUDIO</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="oct3" onchange="updateProgress()"><span class="check-label">Done</span></label>
                     </div>
-                    <label class="check-container"><input type="checkbox" id="d2" onchange="updateProgress()"><span class="check-label">Done</span></label>
+
+                    <!-- Oct 10 (Live 07) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">10 Oct</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">R PROGRAMMING</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="oct10" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Oct 17 (Live 08) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">17 Oct</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">DATA TRANSFORMATION</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="oct17" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Oct 24 (Live 09) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">24 Oct</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">DATA VISUALIZATION</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="oct24" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Oct 31 (Live 10) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">31 Oct</span><span class="badge type-live">🔴 LIVE (NEW)</span></div><div class="task-title">BUILDING TRAFFIC (WEB + SEO)</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="oct31" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Sep 3 (Thu) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">3 Sep</span><span class="badge type-reading">Book</span></div>
-                        <div class="task-title">Self-Development Book</div>
-                        <div class="task-desc">อ่านหนังสือพัฒนาตัวเอง 30 นาที</div>
+            <!-- NOVEMBER 2026 -->
+            <div id="m-nov" class="month-grid" style="display:none;">
+                <div class="calendar-grid">
+                    <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
+
+                    <!-- Nov 7 (Live 11) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">7 Nov</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">ESSENTIAL STATISTICS</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="nov7" onchange="updateProgress()"><span class="check-label">Done</span></label>
                     </div>
-                    <label class="check-container"><input type="checkbox" id="d3" onchange="updateProgress()"><span class="check-label">Done</span></label>
+
+                    <!-- Nov 14 (Live 12) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">14 Nov</span><span class="badge type-live">🔴 LIVE (NEW)</span></div><div class="task-title">AI + AUTOMATING YOUR WORK</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="nov14" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Nov 21 (Live 13) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">21 Nov</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">ESSENTIAL MACHINE LEARNING</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="nov21" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
+
+                    <!-- Nov 28 (Live 14) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">28 Nov</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">PYTHON PROGRAMMING</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="nov28" onchange="updateProgress()"><span class="check-label">Done</span></label>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Sep 4 (Fri) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">4 Sep</span><span class="badge type-ondemand">On-Demand</span></div>
-                        <div class="task-title">Google Sheets 102</div>
-                        <div class="task-desc">VLOOKUP, INDEX MATCH & QUERY</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d4" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
+            <!-- DECEMBER 2026 -->
+            <div id="m-dec" class="month-grid" style="display:none;">
+                <div class="calendar-grid">
+                    <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
 
-                <!-- Sep 5 (Sat) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">5 Sep</span><span class="badge type-live">Live 09:00-12:00</span></div>
-                        <div class="task-title">Live 01: Intro & Systems</div>
-                        <div class="task-desc">Introduction to Data Science</div>
+                    <!-- Dec 5 (Live 15) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">5 Dec</span><span class="badge type-live">🔴 LIVE</span></div><div class="task-title">ESSENTIAL PYTHON FOR DATA ANALYST</div><div class="task-desc">09:00 - 12:00</div></div>
+                        <label class="check-container"><input type="checkbox" id="dec5" onchange="updateProgress()"><span class="check-label">Done</span></label>
                     </div>
-                    <label class="check-container"><input type="checkbox" id="d5" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
 
-                <!-- Sep 6 (Sun) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">6 Sep</span><span class="badge type-rest">Rest</span></div>
-                        <div class="task-title">Rest & Housework</div>
-                        <div class="task-desc">พักผ่อน ทำงานบ้าน เติมพลัง</div>
+                    <!-- Dec 12 (Live 16) -->
+                    <div class="day-card" style="grid-column: 7;">
+                        <div><div class="day-header"><span class="day-number">12 Dec</span><span class="badge type-live">🔴 LIVE (NEW)</span></div><div class="task-title">BECOMING PRO GENERALIST</div><div class="task-desc">09:00 - 12:00 (GRADUATION)</div></div>
+                        <label class="check-container"><input type="checkbox" id="dec12" onchange="updateProgress()"><span class="check-label">Done</span></label>
                     </div>
-                    <label class="check-container"><input type="checkbox" id="d6" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 7 (Mon) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">7 Sep</span><span class="badge type-ondemand">On-Demand</span></div>
-                        <div class="task-title">AI Foundation</div>
-                        <div class="task-desc">Google Gemini & Prompting</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d7" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 8 (Tue) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">8 Sep</span><span class="badge type-reading">Book</span></div>
-                        <div class="task-title">Self-Development Book</div>
-                        <div class="task-desc">อ่านหนังสือพัฒนาตัวเอง 30 นาที</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d8" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 9 (Wed) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">9 Sep</span><span class="badge type-ondemand">On-Demand</span></div>
-                        <div class="task-title">Second Brain System</div>
-                        <div class="task-desc">Notion Setup & Knowledge Base</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d9" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 10 (Thu) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">10 Sep</span><span class="badge type-reading">Book</span></div>
-                        <div class="task-title">Self-Development Book</div>
-                        <div class="task-desc">อ่านหนังสือพัฒนาตัวเอง 30 นาที</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d10" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 11 (Fri) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">11 Sep</span><span class="badge type-ondemand">On-Demand</span></div>
-                        <div class="task-title">AI Analytics Workshop</div>
-                        <div class="task-desc">Data Analysis with AI Tools</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d11" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 12 (Sat) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">12 Sep</span><span class="badge type-live">Live 09:00-12:00</span></div>
-                        <div class="task-title">Live 02: AI Foundation</div>
-                        <div class="task-desc">Deep dive into AI Workflow</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d12" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 13 (Sun) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">13 Sep</span><span class="badge type-rest">Rest</span></div>
-                        <div class="task-title">Rest & Housework</div>
-                        <div class="task-desc">พักผ่อน ทำงานบ้าน เติมพลัง</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d13" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 14 (Mon) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">14 Sep</span><span class="badge type-ondemand">On-Demand</span></div>
-                        <div class="task-title">SQL Basics</div>
-                        <div class="task-desc">SELECT, WHERE & ORDER BY</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d14" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 15 (Tue) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">15 Sep</span><span class="badge type-reading">Book</span></div>
-                        <div class="task-title">Self-Development Book</div>
-                        <div class="task-desc">อ่านหนังสือพัฒนาตัวเอง 30 นาที</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d15" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 16 (Wed) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">16 Sep</span><span class="badge type-ondemand">On-Demand</span></div>
-                        <div class="task-title">SQL Aggregations</div>
-                        <div class="task-desc">GROUP BY, HAVING & COUNT</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d16" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 17 (Thu) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">17 Sep</span><span class="badge type-reading">Book</span></div>
-                        <div class="task-title">Self-Development Book</div>
-                        <div class="task-desc">อ่านหนังสือพัฒนาตัวเอง 30 นาที</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d17" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 18 (Fri) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">18 Sep</span><span class="badge type-ondemand">On-Demand</span></div>
-                        <div class="task-title">Advanced SQL Joins</div>
-                        <div class="task-desc">INNER, LEFT & FULL JOIN</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d18" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 19 (Sat) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">19 Sep</span><span class="badge type-live">Live 09:00-12:00</span></div>
-                        <div class="task-title">Live 03: SQL Database</div>
-                        <div class="task-desc">Relational Database Design</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d19" onchange="updateProgress()"><span class="check-label">Done</span></label>
-                </div>
-
-                <!-- Sep 20 (Sun) -->
-                <div class="day-card">
-                    <div>
-                        <div class="day-header"><span class="day-number">20 Sep</span><span class="badge type-rest">Rest</span></div>
-                        <div class="task-title">Rest & Housework</div>
-                        <div class="task-desc">พักผ่อน ทำงานบ้าน เติมพลัง</div>
-                    </div>
-                    <label class="check-container"><input type="checkbox" id="d20" onchange="updateProgress()"><span class="check-label">Done</span></label>
                 </div>
             </div>
         </section>
 
     </div>
 
-    <!-- Tab Switcher and Auto Progress Saver -->
+    <!-- JavaScript Navigation & Tracker Storage -->
     <script>
         function switchTab(pageId, element) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-
             document.getElementById(pageId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        function showMonth(monthKey, element) {
+            document.querySelectorAll('.month-grid').forEach(grid => grid.style.display = 'none');
+            document.querySelectorAll('.month-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('m-' + monthKey).style.display = 'block';
             element.classList.add('active');
         }
 
